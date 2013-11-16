@@ -2,8 +2,6 @@
 
 source util.sh
 
-sleep 60
-
 while [ true ]
 do
   curl -s "http://chromium-build.appspot.com/p/chromium-status/current" > /tmp/treestatus.txt

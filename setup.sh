@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ -z "$DEBUG" ]
+then
+  sleep 60
+fi
+
 DIR=$(dirname $0)
 cd $DIR
 source util.sh
