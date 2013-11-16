@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 source util.sh
-setup
 
 sleep 60
 

@@ -6,6 +6,15 @@ GREEN=22
 
 function setup()
 {
+  if [ -n "$DEBUG" ]
+  then
+    echo "0" > /tmp/pin$RED
+    echo "0" > /tmp/pin$YELLOW
+    echo "0" > /tmp/pin$GREEN
+    echo "Set up pins."
+    return 0
+  fi
+
   echo $RED > /sys/class/gpio/export
   echo $YELLOW > /sys/class/gpio/export
   echo $GREEN > /sys/class/gpio/export
@@ -18,12 +27,47 @@ function setup()
   echo 0 > /sys/class/gpio/gpio$GREEN/value
 }
 
-function light()
+function debug()
 {
-  echo $2 > /sys/class/gpio/gpio$1/value
+  if [ `cat /tmp/pin$RED` -eq 1 ]
+  then
+    echo -n "Red "
+  fi
+  if [ `cat /tmp/pin$YELLOW` -eq 1 ]
+  then
+    echo -n "Yellow "
+  fi
+  if [ `cat /tmp/pin$GREEN` -eq 1 ]
+  then
+    echo -n "Green "
+  fi
+  echo "."
 }
 
-function connected {
+DEBUGPID=/tmp/debug.pid
+
+function light()
+{
+  if [ -n "$DEBUG" ]
+  then
+    # If debugging is enabled then we set up a short timer and call the debug function.
+    if [ ! -f "$DEBUGPID" ]
+    then
+      (sleep 0.1; debug; rm -f $DEBUGPID) &
+      echo $! > $DEBUGPID
+    fi
+    echo $2 > /tmp/pin$1
+  else
+    echo $2 > /sys/class/gpio/gpio$1/value
+  fi
+}
+
+function connected() {
+  if [ -n "$DEBUG" ]
+  then
+    return 0
+  fi
+
   ERROR=0
   # Verify we have a correct IP.
   if [ `ifconfig wlan0 | grep -c "192.168"` -eq 0 ]
@@ -39,7 +83,7 @@ function connected {
   return $ERROR
 }
 
-function connect {
+function connect() {
   light $RED 0
   light $YELLOW 0
   light $GREEN 0
