@@ -7,10 +7,21 @@ do
   curl -s "http://chromium-build.appspot.com/p/chromium-status/current" > /tmp/treestatus.txt
   if [ $? -gt 0 ]
   then
-    light $RED 1
-    light $YELLOW 1
-    light $GREEN 0
-
+    # delay while flashing the amber
+    for v in 1 2 3 4 5 ; do
+      light $RED 1
+      light $YELLOW 1
+      light $GREEN 1
+      
+      sleep 1
+     
+      light $RED 1
+      light $YELLOW 0
+      light $GREEN 1
+       
+      sleep 1
+    done
+    
     # On an error, verify still connected.
     connected
     if [ $? -eq 1 ]
@@ -43,7 +54,7 @@ do
       light $YELLOW 0
       light $GREEN 1
     fi
+    sleep 10
   fi
-  sleep 10
 done
 
