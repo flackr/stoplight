@@ -33,6 +33,11 @@ do
       light $RED 0
       light $YELLOW 0
       light $GREEN 1
+    elif [ `grep -c "div class=\"status-message maintenace" /tmp/treestatus.txt` -gt 0 ]
+    then
+      light $RED 1
+      light $YELLOW 1
+      light $GREEN 0
     else
       light $RED 1
       light $YELLOW 0
