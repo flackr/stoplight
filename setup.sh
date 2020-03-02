@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
 
-if [ -z "$DEBUG" ]
-then
-  sleep 60
-fi
-
 DIR=$(dirname $0)
 cd $DIR
 source util.sh
 setup
 
+# Wait for connection
 connected
 while [ $? -eq 1 ]
 do
-  connect
   connected
 done
 

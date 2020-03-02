@@ -70,7 +70,7 @@ function connected() {
 
   ERROR=0
   # Verify we have a correct IP.
-  if [ `ifconfig wlan0 | grep -c "192.168"` -eq 0 ]
+  if [ `ifconfig wlan0 | grep -c "inet.*broadcast"` -eq 0 ]
   then
     ERROR=1
   fi
@@ -82,20 +82,3 @@ function connected() {
   fi
   return $ERROR
 }
-
-function connect() {
-  light $RED 0
-  light $YELLOW 0
-  light $GREEN 0
-  (while [ true ]; do light $YELLOW 0; sleep 1; light $YELLOW 1; sleep 1; done) &
-  BLINKPID=$!
-  ifconfig wlan0 down
-  ifconfig wlan0 up
-  iwconfig wlan0 essid GoogleGuest
-  sleep 15
-  dhcpcd wlan0
-  sleep 10
-  kill $BLINKPID
-  light $YELLOW 0
-}
-
