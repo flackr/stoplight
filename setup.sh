@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# Schedule regular reboot around midnight
+HOURS=$[24-`date '+%H'`]
+SECS=$[$HOURS*60*60]
+if [ $DEBUG ]; then
+  echo "Schedule reboot in $HOURS hours."
+else
+  (sleep $SECS && reboot) &
+fi
+
 DIR=$(dirname $0)
 cd $DIR
 source util.sh
