@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Schedule regular reboot around midnight
-HOURS=$[24-`date '+%H'`]
+HOURS=$[24-10#`date '+%H'`]
 SECS=$[$HOURS*60*60]
 if [ $DEBUG ]; then
   echo "Schedule reboot in $HOURS hours."
